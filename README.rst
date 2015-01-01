@@ -7,12 +7,13 @@ For details about Rakuten MA, See https://github.com/rakuten-nlp/rakutenma
 
 Contributions are welcome!
 
+
 Installation
 ==============
 
 ::
- pip install rakutenma
 
+ pip install rakutenma
 
 Example
 ===========
@@ -78,6 +79,7 @@ As compared to original RakutenMA, following methods are added:
 
 - RakutenMA::load(model_path)
   - Load model from JSON file
+
 - RakutenMA::save(model_path)
   - Save model to path
 
@@ -86,20 +88,22 @@ misc
 As initial setting, following values are set:
 
 - rma.featset = CTYPE_JA_PATTERNS  # RakutenMA.default_featset_ja
-- rma.hash_func = rma.create_hash_func(15);
-
+- rma.hash_func = rma.create_hash_func(15)
 
 LICENSE
 =========
+
 Apache License version 2.0
 
 
 Copyright
-============
+=============
 
-- Rakuten MA Python
- - (c) 2015- Yukino Ikegami
-- Rakuten MA (original)
- - (c) 2014 Rakuten NLP Project
+Rakuten MA Python
+(c) 2015- Yukino Ikegami
+
+Rakuten MA (original)
+(c) 2014 Rakuten NLP Project
+
 
 All Rights Reserved.
