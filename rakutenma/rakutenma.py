@@ -33,6 +33,13 @@ FEATSET_ZH = (
     "c1", "c9", "c2", "c8", "c3", "c7"
 )
 
+TDEF = Trie.insert({}, [_DEF_LABEL, _DEF_LABEL], 1.)
+TDEF = Trie.insert(TDEF, [_BEOS_LABEL, _DEF_LABEL], 0.1)
+TDEF = Trie.insert(TDEF, [_DEF_LABEL, _BEOS_LABEL], 0.1)
+
+EDEF = Trie.insert({}, [_DEF_LABEL], 0.1)
+EDEF = Trie.insert(EDEF, [_BEOS_LABEL], 0.)
+
 
 class Token():
     __slots__ = ("c", "f", "l", "t")
@@ -268,15 +275,10 @@ class RakutenMA(object):
         Return:
             <list> csent
         """
-        t_def = Trie.insert({}, [_DEF_LABEL, _DEF_LABEL], 1.)
-        t_def = Trie.insert(t_def, [_BEOS_LABEL, _DEF_LABEL], 0.1)
-        t_def = Trie.insert(t_def, [_DEF_LABEL, _BEOS_LABEL], 0.1)
-
-        e_def = Trie.insert({}, [_DEF_LABEL], 0.1)
-        e_def = Trie.insert(e_def, [_BEOS_LABEL], 0.)
+        e_def = EDEF.copy()
 
         weights = self.model.get('mu', {})
-        trans = weights.get('t', t_def)
+        trans = weights.get('t', TDEF.copy())
 
         statesp = {
             _BEOS_LABEL: {"score": 0., "path": [_BEOS_LABEL]}
