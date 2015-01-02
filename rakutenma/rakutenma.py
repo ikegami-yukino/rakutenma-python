@@ -247,17 +247,17 @@ class RakutenMA(object):
 
         for (i, cfeat) in enumerate(cfeats):
             cemits = Trie.find_partial(weights, cfeat) or e_def
-
-            # tag dictionary
-            # the possible set of tags is solely defined by the first feature
-            if i == 0:
-                states0.update({k: True for k in cemits})
-
-            if cemits:
-                for k in cemits:
+            for k in cemits:
+                if i == 0:
+                    # tag dictionary
+                    # the possible set of tags is solely defined by the first feature
+                    states0[k] = True
+                    scores0[k] = cemits[k]['v']
+                else:
                     scores0[k] = scores0.get(k, 0) + cemits[k]['v']
         # replace by scores
-        states0.update(scores0)
+        for s0 in states0:
+            states0[s0] = scores0[s0]
         return states0
 
     def decode(self, csent):
