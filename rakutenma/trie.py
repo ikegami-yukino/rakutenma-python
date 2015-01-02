@@ -14,11 +14,9 @@ class Trie:
             <float> value
         """
         if depth == len(key):
-            return trie.get('v')
-        else:
-            node = trie.get(key[depth])
-            if node:
-                return Trie.find(node, key, depth + 1)
+            return trie.get("v")
+        elif key[depth] in trie:
+            return Trie.find(trie[key[depth]], key, depth + 1)
 
     @staticmethod
     def find_partial(trie, key, depth=0):
@@ -31,26 +29,29 @@ class Trie:
             <dict> found_trie
         """
         while depth < len(key):
-            trie = trie.get(key[depth])
-            if not trie:
+            if key[depth] not in trie:
                 return
+            trie = trie[key[depth]]
             depth += 1
         return trie
 
     @staticmethod
-    def insert(trie, key, val, depth=0):
+    def insert(trie, key, val, depth=0, key_length=0):
         """
         Args:
             <dict> trie
             <str> key
             <float> val
             <int> depth
+            <int> length
         Return:
             <dict> trie
         """
-        if depth < len(key):
+        if key_length == 0:
+            key_length = len(key)
+        if depth < key_length:
             trie[key[depth]] = Trie.insert(trie.get(key[depth], {}), key, val,
-                                           depth + 1)
+                                           depth + 1, key_length)
         else:
             trie['v'] = val
         return trie
@@ -66,10 +67,11 @@ class Trie:
         """
         res = 0.
         for key in trie1:
-            if key == "v":
-                res += trie1['v'] * trie2.get('v', 0)
-            elif key in trie2:
-                res += Trie.inner_prod(trie1[key], trie2[key])
+            if key in trie2:
+                if key == "v":
+                    res += trie1["v"] * trie2["v"]
+                else:
+                    res += Trie.inner_prod(trie1[key], trie2[key])
         return res
 
     @staticmethod
