@@ -51,7 +51,7 @@ class Token():
         self.t = t
 
     def __repr__(self):
-        return '<c=%s, f=%s, l=%s, t=%s>' % (self.c, self.f, self.l, self.t)
+        return "<c=%s, f=%s, l=%s, t=%s>" % (self.c, self.f, self.l, self.t)
 
 
 class RakutenMA(object):
@@ -65,8 +65,8 @@ class RakutenMA(object):
         """
         self.model = model
         self.scw = SCW(phi, c)
-        self.scw.mu = model.get('mu', {})
-        self.scw.sigma = model.get('sigma', {})
+        self.scw.mu = model.get("mu", {})
+        self.scw.sigma = model.get("sigma", {})
 
         self.ctype_func = self.ctype_ja_default_func
         self.build_ctype_map(CTYPE_JA_PATTERNS)
@@ -77,12 +77,12 @@ class RakutenMA(object):
     def set_tag_scheme(self, scheme):
         self.tag_scheme = scheme
 
-    def save(self, filename, float_repr='.6f'):
+    def save(self, filename, float_repr=".6f"):
         json.encoder.FLOAT_REPR = lambda o: format(o, float_repr)
-        json.dump(self.model, open(filename, 'w'))
+        json.dump(self.model, open(filename, "w"))
 
     def load(self, filename):
-        self.set_model(json.load(open(filename, 'r')))
+        self.set_model(json.load(open(filename, "r")))
 
     @staticmethod
     def string2hash(_str):
@@ -102,7 +102,7 @@ class RakutenMA(object):
             if _hash >= 0x80000000:
                 _hash -= 0x100000000
             elif _hash <= -0x80000000:
-                _hash = int('-0x' + hex(_hash)[-8:], 16)
+                _hash = int("-0x" + hex(_hash)[-8:], 16)
         return _hash
 
     def create_hash_func(self, bits):
@@ -131,10 +131,7 @@ class RakutenMA(object):
             <list> csent
         """
         csent = [Token(l=_BEOS_LABEL)]  # BOS
-
-        for char in _input:
-            csent.append(Token(c=char, t=self.ctype_func(char)))
-
+        csent += [Token(c=char, t=self.ctype_func(char)) for char in _input]
         csent.append(Token(l=_BEOS_LABEL))  # EOS
         return csent
 
@@ -150,7 +147,7 @@ class RakutenMA(object):
         _t = lambda i: csent[i] if csent_length > i >= 0 else Token()
 
         # feature hashing function
-        _f = self.hash_func if hasattr(self, 'hash_func') else lambda x: x
+        _f = self.hash_func if hasattr(self, "hash_func") else lambda x: x
 
         def add_ctype_feats(arr, label, ctype):
             """a helper function to add all the feature values of ctype to arr
@@ -161,7 +158,6 @@ class RakutenMA(object):
                 arr.append(_f([label, ctype]))
             else:
                 arr += [_f([label, i]) for i in ctype]
-            return arr
 
         for (i, x) in enumerate(csent):
             csent[i].f = []
@@ -169,19 +165,19 @@ class RakutenMA(object):
             for feat in self.featset:
                 # character type unigram
                 if feat == "c0":
-                    csent[i].f = add_ctype_feats(csent[i].f, feat, _t(i).t)
+                    add_ctype_feats(csent[i].f, feat, _t(i).t)
                 elif feat == "c1":
-                    csent[i].f = add_ctype_feats(csent[i].f, feat, _t(i+1).t)
+                    add_ctype_feats(csent[i].f, feat, _t(i+1).t)
                 elif feat == "c9":
-                    csent[i].f = add_ctype_feats(csent[i].f, feat, _t(i-1).t)
+                    add_ctype_feats(csent[i].f, feat, _t(i-1).t)
                 elif feat == "c2":
-                    csent[i].f = add_ctype_feats(csent[i].f, feat, _t(i+2).t)
+                    add_ctype_feats(csent[i].f, feat, _t(i+2).t)
                 elif feat == "c8":
-                    csent[i].f = add_ctype_feats(csent[i].f, feat, _t(i-2).t)
+                    add_ctype_feats(csent[i].f, feat, _t(i-2).t)
                 elif feat == "c3":
-                    csent[i].f = add_ctype_feats(csent[i].f, feat, _t(i+3).t)
+                    add_ctype_feats(csent[i].f, feat, _t(i+3).t)
                 elif feat == "c7":
-                    csent[i].f = add_ctype_feats(csent[i].f, feat, _t(i-3).t)
+                    add_ctype_feats(csent[i].f, feat, _t(i-3).t)
                 # character unigram
                 elif feat == "w0":
                     csent[i].f.append(_f([feat, _t(i).c]))
@@ -233,7 +229,7 @@ class RakutenMA(object):
                 else:
                     # if the feature template is a function,
                     # invoke it and add the returned value
-                    if hasattr(feat, '__call__'):
+                    if hasattr(feat, "__call__"):
                         csent[i].f.append(_f(feat(_t, i)))
                     else:
                         raise ValueError("Invalid feature specification!")
@@ -259,9 +255,9 @@ class RakutenMA(object):
                     # tag dictionary
                     # the possible set of tags is solely defined by the first feature
                     states0[k] = True
-                    scores0[k] = cemits[k]['v']
+                    scores0[k] = cemits[k]["v"]
                 else:
-                    scores0[k] = scores0.get(k, 0) + cemits[k]['v']
+                    scores0[k] = scores0.get(k, 0) + cemits[k]["v"]
         # replace by scores
         for s0 in states0:
             states0[s0] = scores0[s0]
@@ -277,8 +273,8 @@ class RakutenMA(object):
         """
         e_def = EDEF.copy()
 
-        weights = self.model.get('mu', {})
-        trans = weights.get('t', TDEF.copy())
+        weights = self.model.get("mu", {})
+        trans = weights.get("t", TDEF.copy())
 
         statesp = {
             _BEOS_LABEL: {"score": 0., "path": [_BEOS_LABEL]}
@@ -288,35 +284,30 @@ class RakutenMA(object):
 
         for char in csent[1:]:
             states0 = self.calc_states0(char.f, weights, e_def)
-            for s0 in states0:
+            for (s0, states0_score) in states0.items():
                 max_score = -float("inf")
                 max_state = None
-                states0_score = states0[s0]
                 trans0 = trans.get(s0, {})
                 for sp in statesp:
                     t_score = 0.
                     if sp in trans0:
-                        t_score = trans0[sp]['v'] or 0.
-
+                        t_score = trans0[sp]["v"]
+                    statesp_score = 0
                     if isinstance(statesp[sp], dict):
-                        statesp_score = statesp[sp]['score']
-                    else:
-                        statesp_score = 0
+                        statesp_score = statesp[sp]["score"]
                     score = statesp_score + states0_score + t_score
                     if score > max_score:
                         max_score = score
                         max_state = sp
-
                 if max_state and max_score > 0:
                     path = []
                     if isinstance(statesp[max_state], dict):
                         path = statesp[max_state]["path"]
-                    states0[s0] = {"score": max_score,
-                                   "path": path + [s0]}
+                    states0[s0] = {"score": max_score, "path": path + [s0]}
             statesp = states0
 
         # track the path and assign to csent[i].l
-        final_path = statesp[_BEOS_LABEL].get('path', {})
+        final_path = statesp[_BEOS_LABEL].get("path", {})
         for (i, x) in enumerate(csent):
             csent[i].l = final_path[i] or _DEF_LABEL
         return csent
@@ -464,15 +455,15 @@ class RakutenMA(object):
         ans_csent = self.tokens2csent(sent, self.tag_scheme)
         ans_csent = self.add_efeats(ans_csent)
         ans_feats = self.csent2feats(ans_csent)
-        res['ans'] = self.csent2tokens(ans_csent, self.tag_scheme)
+        res["ans"] = self.csent2tokens(ans_csent, self.tag_scheme)
 
         # get system output
         sys_csent = self.decode(ans_csent)
-        res['sys'] = self.csent2tokens(sys_csent, self.tag_scheme)
+        res["sys"] = self.csent2tokens(sys_csent, self.tag_scheme)
 
         # update
-        if self.tokens_identical(res['ans'], res['sys']):
-            res['updated'] = False
+        if self.tokens_identical(res["ans"], res["sys"]):
+            res["updated"] = False
         else:
             ans_trie = {}
             for ans_feat in ans_feats:
@@ -484,9 +475,9 @@ class RakutenMA(object):
                 sys_trie = Trie.insert(sys_trie, sys_feat, 1)
             self.scw.update(sys_trie, -1)
 
-            res['updated'] = True
-            self.model['mu'] = self.scw.mu
-            self.model['sigma'] = self.scw.sigma
+            res["updated"] = True
+            self.model["mu"] = self.scw.mu
+            self.model["sigma"] = self.scw.sigma
         return res
 
     def prune(self, _lambda, sigma_th):
@@ -496,10 +487,9 @@ class RakutenMA(object):
             <float> _lambda
             <float> sigma_th
         """
-
         self.scw.prune(_lambda, sigma_th)
-        self.model['mu'] = self.scw.mu
-        self.model['sigma'] = self.scw.sigma
+        self.model["mu"] = self.scw.mu
+        self.model["sigma"] = self.scw.sigma
 
     def set_model(self, model):
         """set a new model
@@ -507,8 +497,8 @@ class RakutenMA(object):
             <dict> model
         """
         self.model = model
-        self.scw.mu = model.get('mu', {})
-        self.scw.sigma = model.get('sigma', {})
+        self.scw.mu = model.get("mu", {})
+        self.scw.sigma = model.get("sigma", {})
 
     @staticmethod
     def tokens2string(tokens):
@@ -586,7 +576,7 @@ class RakutenMA(object):
         tokenized_corpus = []
         for sent in corpus:
             sent_str = [j[0] for j in sent]
-            tokenized_corpus.append(tokenize_func(''.join(sent_str)))
+            tokenized_corpus.append(tokenize_func("".join(sent_str)))
         return tokenized_corpus
 
     @staticmethod

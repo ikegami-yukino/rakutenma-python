@@ -116,18 +116,18 @@ class SCW(object):
             vals = args[0]
             sigma_val = Trie.find(old_sigma, key)
             if mu_val < -_lambda:
-                vals['new_mu'] = Trie.insert(vals['new_mu'], key, mu_val + _lambda)
-                vals['new_sigma'] = Trie.insert(vals['new_sigma'], key, sigma_val)
+                vals["new_mu"] = Trie.insert(vals["new_mu"], key, mu_val + _lambda)
+                vals["new_sigma"] = Trie.insert(vals["new_sigma"], key, sigma_val)
             elif mu_val > _lambda:
-                vals['new_mu'] = Trie.insert(vals['new_mu'], key, mu_val - _lambda)
-                vals['new_sigma'] = Trie.insert(vals['new_sigma'], key, sigma_val)
+                vals["new_mu"] = Trie.insert(vals["new_mu"], key, mu_val - _lambda)
+                vals["new_sigma"] = Trie.insert(vals["new_sigma"], key, sigma_val)
             else:
                 if (sigma_val < sigma_th):
-                    vals['new_mu'] = Trie.insert(vals['new_mu'], key, 0)
-                    vals['new_sigma'] = Trie.insert(vals['new_sigma'], key, sigma_val)
+                    vals["new_mu"] = Trie.insert(vals["new_mu"], key, 0)
+                    vals["new_sigma"] = Trie.insert(vals["new_sigma"], key, sigma_val)
 
-        vals = {'new_mu': new_mu, 'new_sigma': new_sigma}
+        vals = {"new_mu": new_mu, "new_sigma": new_sigma}
         Trie.each(self.mu, fobos, [], vals)
 
-        self.mu = vals['new_mu']
-        self.sigma = vals['new_sigma']
+        self.mu = vals["new_mu"]
+        self.sigma = vals["new_sigma"]

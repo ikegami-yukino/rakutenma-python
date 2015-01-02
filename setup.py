@@ -5,7 +5,7 @@ from setuptools import setup
 
 with open(os.path.join('rakutenma', '__init__.py'), 'r') as f:
     version = re.compile(
-        r".*__version__ = '(.*?)'", re.S).match(f.read()).group(1)
+        r'.*__version__ = "(.*?)"', re.S).match(f.read()).group(1)
 
 setup(
     name='rakutenma',

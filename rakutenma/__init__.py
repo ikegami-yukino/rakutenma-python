@@ -3,7 +3,7 @@
 Rakuten MA Python (morphological analyzer) is a Python version of Rakuten MA
 (word segmentor + PoS Tagger) for Chinese and Japanese.
 
-Rakuten MA Python and Rakuten MA (original) are distributed under 
+Rakuten MA Python and Rakuten MA (original) are distributed under
 Apache License, version 2.0. http://www.apache.org/licenses/LICENSE-2.0
 
 Rakuten MA Python
@@ -16,9 +16,9 @@ from .scw import SCW
 from .trie import Trie
 
 VERSION = (0, 1)
-__version__ = '0.1'
-__all__ = ['RakutenMA', 'Token', 'SCW', 'Trie', '_DEF_LABEL', '_BEOS_LABEL',
-           'FEATSET_JA', 'FEATSET_ZH']
+__version__ = "0.1"
+__all__ = ["RakutenMA", "Token", "SCW", "Trie", "_DEF_LABEL", "_BEOS_LABEL",
+           "FEATSET_JA", "FEATSET_ZH"]
 
 _DEF_LABEL = "O"     # default label
 _BEOS_LABEL = "_"    # label for BOS / EOS

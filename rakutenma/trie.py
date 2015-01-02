@@ -53,7 +53,7 @@ class Trie:
             trie[key[depth]] = Trie.insert(trie.get(key[depth], {}), key, val,
                                            depth + 1, key_length)
         else:
-            trie['v'] = val
+            trie["v"] = val
         return trie
 
     @staticmethod
@@ -87,7 +87,7 @@ class Trie:
         """
         for key in trie2:
             if key == "v":
-                trie1['v'] = trie1.get('v', _def) + trie2['v'] * coef
+                trie1["v"] = trie1.get("v", _def) + trie2["v"] * coef
             else:
                 trie1[key] = Trie.add_coef(trie1.get(key, {}), trie2[key],
                                            coef, _def)
@@ -105,7 +105,7 @@ class Trie:
         for key in trie2:
             if key in trie1:
                 if key == "v":
-                    trie1['v'] *= trie2['v']
+                    trie1["v"] *= trie2["v"]
                 else:
                     trie1[key] = Trie.mult(trie1[key], trie2[key])
         return trie1
@@ -122,7 +122,7 @@ class Trie:
         res = ""
         for key in trie:
             if key == "v":
-                res += "%s\t%s\n" % (" ".join(path), trie['v'])
+                res += "%s\t%s\n" % (" ".join(path), trie["v"])
             else:
                 res += Trie.toString(trie[key], path + [key])
         return res
@@ -138,6 +138,6 @@ class Trie:
         """
         for key in trie:
             if key == "v":
-                callback(path, trie['v'], *args)
+                callback(path, trie["v"], *args)
             else:
                 Trie.each(trie[key], callback, path + [key], *args)

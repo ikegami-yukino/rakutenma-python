@@ -80,7 +80,7 @@ class TestTrie(object):
 
     def test_find_partial(self):
         trie = self.get_trie1()
-        assert_equals(Trie.find_partial(trie, ["t", "e"])["a"]['v'], 3)
+        assert_equals(Trie.find_partial(trie, ["t", "e"])["a"]["v"], 3)
         assert_equals(Trie.find_partial(trie, ["x"]), None)
 
     def test_toString(self):

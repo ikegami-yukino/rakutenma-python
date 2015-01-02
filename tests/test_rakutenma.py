@@ -2,14 +2,14 @@
 from nose.tools import assert_equals, assert_true, assert_false, assert_raises
 from rakutenma import RakutenMA, Token, Trie, _BEOS_LABEL
 
-WEIGHTS = {"c0": {"a": {"B-N": {'v': 1.0}, "I-N": {'v': 1.0}, "E-N": {'v': 1.0}}},
-           "w0": {"f": {"B-N": {'v': 1.0}},
-                  "o": {"I-N": {'v': 1.0}, "E-N": {'v': 1.0}},
-                  "b": {"B-N": {'v': 1.0}},
-                  "a": {"I-N": {'v': 1.0}},
-                  "r": {"E-N": {'v': 1.0}}},
-           "t":   {"I-N": {"B-N": {'v': 1.0}},
-                   "E-N": {"I-N": {'v': 1.0}}}}
+WEIGHTS = {"c0": {"a": {"B-N": {"v": 1.0}, "I-N": {"v": 1.0}, "E-N": {"v": 1.0}}},
+           "w0": {"f": {"B-N": {"v": 1.0}},
+                  "o": {"I-N": {"v": 1.0}, "E-N": {"v": 1.0}},
+                  "b": {"B-N": {"v": 1.0}},
+                  "a": {"I-N": {"v": 1.0}},
+                  "r": {"E-N": {"v": 1.0}}},
+           "t":   {"I-N": {"B-N": {"v": 1.0}},
+                   "E-N": {"I-N": {"v": 1.0}}}}
 
 
 class TestRakutenMA(object):
@@ -41,7 +41,7 @@ class TestRakutenMA(object):
         assert_equals(self.rma.scw.sigma, {"feat1": 0.4})
 
     def test_count_tps(self):
-        # the last "a" doesn't match because of offset of "d+"
+        # the last "a" doesn"t match because of offset of "d+"
         sent1 = ["a", "b", "c", "d", "a"]
         sent2 = ["a", "b", "c", "d+", "a"]
         assert_equals(RakutenMA.count_tps(sent1, sent2), 3)
@@ -107,25 +107,26 @@ class TestRakutenMA(object):
         assert_equals(RakutenMA.tokens2string(sent), "hoge [X] | fuga [Y] | p [Z]")
 
     def test_string2hash(self):
-        assert_equals(self.rma.string2hash('hoge'), 3208229)
-        assert_equals(self.rma.string2hash('piyopiyo'), -105052642)
+        assert_equals(self.rma.string2hash("hoge"), 3208229)
+        assert_equals(self.rma.string2hash("piyopiyo"), -105052642)
         assert_equals(self.rma.string2hash(""), 0)
 
     def test_create_hash_func(self):
         hash_func = self.rma.create_hash_func(4)
-        assert_equals(hash_func(["feat1", "foo"]), ['5'])
-        assert_equals(hash_func(["feat1", "bar"]), ['2'])
-        assert_equals(hash_func(["feat1", "baz"]), ['10'])
-        assert_equals(hash_func(["feat1", "qux"]), ['3'])
+        assert_equals(hash_func(["feat1", "foo"]), ["5"])
+        assert_equals(hash_func(["feat1", "bar"]), ["2"])
+        assert_equals(hash_func(["feat1", "baz"]), ["10"])
+        assert_equals(hash_func(["feat1", "qux"]), ["3"])
 
     def test_str2csent(self):
-        actual = self.rma.str2csent('hoge')
-        desired = [Token(l=_BEOS_LABEL),
-                Token(c="h", t=self.rma.ctype_ja_default_func("h")),
-                Token(c="o", t=self.rma.ctype_ja_default_func("o")),
-                Token(c="g", t=self.rma.ctype_ja_default_func("g")),
-                Token(c="e", t=self.rma.ctype_ja_default_func("e")),
-                Token(l=_BEOS_LABEL)]
+        actual = self.rma.str2csent("hoge")
+        desired = [
+            Token(l=_BEOS_LABEL),
+            Token(c="h", t=self.rma.ctype_ja_default_func("h")),
+            Token(c="o", t=self.rma.ctype_ja_default_func("o")),
+            Token(c="g", t=self.rma.ctype_ja_default_func("g")),
+            Token(c="e", t=self.rma.ctype_ja_default_func("e")),
+            Token(l=_BEOS_LABEL)]
 
         assert_equals(len(actual), len(desired))
         for i in range(len(actual)):
@@ -220,41 +221,41 @@ class TestRakutenMA(object):
         csent = self.rma.tokens2csent([["foo", "N"], ["bar", "N"]], "SBIEO")
         csent = self.rma.add_efeats(csent)
         feats = self.rma.csent2feats(csent)
-        desired = (["w0", "", "_"], ["w0", "f", "B-N"], ["w0", "o", "I-N"],
-                    ["w0", "o", "E-N"], ["w0", "b", "B-N"], ["w0", "a", "I-N"],
-                    ["w0", "r", "E-N"], ["t", "B-N", "_"], ["t", "I-N", "B-N"],
-                    ["t", "E-N", "I-N"], ["t", "B-N", "E-N"], ["t", "_", "E-N"])
+        desired = (
+            ["w0", "", "_"], ["w0", "f", "B-N"], ["w0", "o", "I-N"],
+            ["w0", "o", "E-N"], ["w0", "b", "B-N"], ["w0", "a", "I-N"],
+            ["w0", "r", "E-N"], ["t", "B-N", "_"], ["t", "I-N", "B-N"],
+            ["t", "E-N", "I-N"], ["t", "B-N", "E-N"], ["t", "_", "E-N"])
         for d in desired:
             assert_true(d in feats)
         assert_true(["t", "E-N", "B-N"] not in feats)
         assert_true(["t", "B-N", "I-N"] not in feats)
 
-
-    def test_calc_states0(self):     
+    def test_calc_states0(self):
         self.rma.featset = ["c0", "w0"]
         csent = self.rma.tokens2csent([["foo", "N"], ["bar", "N"]], "SBIEO")
         csent = self.rma.add_efeats(csent)
 
         assert_equals(self.rma.calc_states0(csent[1].f, WEIGHTS, {}),
-                      {'B-N': 2, 'I-N': 1, 'E-N': 1})
+                      {"B-N": 2, "I-N": 1, "E-N": 1})
         assert_equals(self.rma.calc_states0(csent[2].f, WEIGHTS, {}),
-                      {'B-N': 1, 'I-N': 2, 'E-N': 2})
+                      {"B-N": 1, "I-N": 2, "E-N": 2})
         assert_equals(self.rma.calc_states0(csent[3].f, WEIGHTS, {}),
-                      {'B-N': 1, 'I-N': 2, 'E-N': 2})
+                      {"B-N": 1, "I-N": 2, "E-N": 2})
         assert_equals(self.rma.calc_states0(csent[4].f, WEIGHTS, {}),
-                      {'B-N': 2, 'I-N': 1, 'E-N': 1})
+                      {"B-N": 2, "I-N": 1, "E-N": 1})
         assert_equals(self.rma.calc_states0(csent[5].f, WEIGHTS, {}),
-                      {'B-N': 1, 'I-N': 2, 'E-N': 1})
+                      {"B-N": 1, "I-N": 2, "E-N": 1})
         assert_equals(self.rma.calc_states0(csent[6].f, WEIGHTS, {}),
-                      {'B-N': 1, 'I-N': 1, 'E-N': 2})
+                      {"B-N": 1, "I-N": 1, "E-N": 2})
 
     def test_decode(self):
         csent = self.rma.tokens2csent([["foo", "N"], ["bar", "N"]], "SBIEO")
         csent = self.rma.add_efeats(csent)
         for i in range(len(csent)):
-          csent[i].l = ''
+            csent[i].l = ""
 
-        self.rma.model['mu'] = WEIGHTS
+        self.rma.model["mu"] = WEIGHTS
         csent = self.rma.decode(csent)
         assert_equals(csent[0].l, "_")
         assert_equals(csent[1].l, "B-N")
@@ -282,10 +283,10 @@ class TestRakutenMA(object):
         self.rma.featset = ["w0"]
 
         res = self.rma.train_one([["foo", "N-nc"], ["bar", "N-nc"]])
-        assert_true(res['updated'])
-        assert_true(Trie.find(self.rma.model['mu'], ["w0", "f", "B-N"]) > 0)
-        assert_true(Trie.find(self.rma.model['mu'], ["w0", "o", "I-N"]) > 0)
-        assert_true(Trie.find(self.rma.model['mu'], ["w0", "o", "E-N"]) > 0)
+        assert_true(res["updated"])
+        assert_true(Trie.find(self.rma.model["mu"], ["w0", "f", "B-N"]) > 0)
+        assert_true(Trie.find(self.rma.model["mu"], ["w0", "o", "I-N"]) > 0)
+        assert_true(Trie.find(self.rma.model["mu"], ["w0", "o", "E-N"]) > 0)
         assert_equals(self.rma.tokenize("foobar"), [["foo", "N-nc"], ["bar", "N-nc"]])
 
     def test_set_tag_scheme(self):
