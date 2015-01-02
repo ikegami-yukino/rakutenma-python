@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
 import json
-import ctypes
 from .scw import SCW
 from .trie import Trie
 
@@ -89,8 +88,14 @@ class RakutenMA(object):
         """
         _hash = 0
         for char in _str:
-            _hash = (ctypes.c_int(_hash << 5).value - _hash) + ord(char)
-            _hash = ctypes.c_int(_hash).value
+            shifted = _hash << 5
+            if shifted & 0x80000000:
+                shifted = -(0x100000000 - shifted)
+            _hash = (shifted - _hash) + ord(char)
+            if _hash >= 0x80000000:
+                _hash -= 0x100000000
+            elif _hash <= -0x80000000:
+                _hash = int('-0x' + hex(_hash)[-8:], 16)
         return _hash
 
     def create_hash_func(self, bits):
