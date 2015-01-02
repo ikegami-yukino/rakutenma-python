@@ -139,7 +139,8 @@ class RakutenMA(object):
         Return:
             <list> csent
         """
-        _t = lambda i: csent[i] if len(csent) > i >= 0 else Token()
+        csent_length = len(csent)
+        _t = lambda i: csent[i] if csent_length > i >= 0 else Token()
 
         # feature hashing function
         _f = self.hash_func if hasattr(self, 'hash_func') else lambda x: x
@@ -155,7 +156,7 @@ class RakutenMA(object):
                 arr += [_f([label, i]) for i in ctype]
             return arr
 
-        for i in range(len(csent)):
+        for (i, x) in enumerate(csent):
             csent[i].f = []
 
             for feat in self.featset:
@@ -314,7 +315,7 @@ class RakutenMA(object):
 
         # track the path and assign to csent[i].l
         final_path = statesp[_BEOS_LABEL].get('path', {})
-        for i in range(len(csent)):
+        for (i, x) in enumerate(csent):
             csent[i].l = final_path[i] or _DEF_LABEL
         return csent
 
@@ -358,7 +359,7 @@ class RakutenMA(object):
                     tokens.append([cs.c, tail])
                     ctoken = None
         elif scheme == "IOB2":
-            for i in range(1, len(csent)-1):  # Skip BOS and EOS
+            for i in csent[1:-1]:  # Skip BOS and EOS
                 head = csent[i].l[0]
                 tail = csent[i].l[2:]
                 if head == "B":
@@ -405,15 +406,16 @@ class RakutenMA(object):
 
         if scheme == "SBIEO":
             for token in tokens:
-                if len(token[0]) == 1:
+                length = len(token[0])
+                if length == 1:
                     csent.append(Token(c=token[0], t=self.ctype_func(token[0]),
                                        l="S-" + token[1]))
                 else:
-                    for j in range(len(token[0])):
+                    for j in range(length):
                         tag = "I-"
                         if j == 0:
                             tag = "B-"
-                        elif j == len(token[0])-1:
+                        elif j == (length - 1):
                             tag = "E-"
                         csent.append(Token(c=token[0][j],
                                            t=self.ctype_func(token[0][j]),
