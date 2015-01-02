@@ -459,37 +459,34 @@ class RakutenMA(object):
             <dict> res: result
         """
         res = {}
-        sent_str = "".join([i[0] for i in sent])
 
         # get answer feats
         ans_csent = self.tokens2csent(sent, self.tag_scheme)
         ans_csent = self.add_efeats(ans_csent)
         ans_feats = self.csent2feats(ans_csent)
-        ans_trie = {}
-        for ans_feat in ans_feats:
-            ans_trie = Trie.insert(ans_trie, ans_feat, 1)
         res['ans'] = self.csent2tokens(ans_csent, self.tag_scheme)
 
         # get system output
-        sys_csent = self.str2csent(sent_str)
-        sys_csent = self.add_efeats(sys_csent)
-        sys_csent = self.decode(sys_csent)
-        sys_feats = self.csent2feats(sys_csent)
-        sys_trie = {}
-        for sys_feat in sys_feats:
-            sys_trie = Trie.insert(sys_trie, sys_feat, 1)
+        sys_csent = self.decode(ans_csent)
         res['sys'] = self.csent2tokens(sys_csent, self.tag_scheme)
 
         # update
         if self.tokens_identical(res['ans'], res['sys']):
             res['updated'] = False
         else:
+            ans_trie = {}
+            for ans_feat in ans_feats:
+                ans_trie = Trie.insert(ans_trie, ans_feat, 1)
             self.scw.update(ans_trie, 1)
-            self.scw.update(sys_trie, -1)
-            res['updated'] = True
 
-        self.model['mu'] = self.scw.mu
-        self.model['sigma'] = self.scw.sigma
+            sys_trie = {}
+            for sys_feat in self.csent2feats(sys_csent):
+                sys_trie = Trie.insert(sys_trie, sys_feat, 1)
+            self.scw.update(sys_trie, -1)
+
+            res['updated'] = True
+            self.model['mu'] = self.scw.mu
+            self.model['sigma'] = self.scw.sigma
         return res
 
     def prune(self, _lambda, sigma_th):
