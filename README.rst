@@ -13,6 +13,8 @@ Rakuten MA Python (morphological analyzer) is a Python version of Rakuten MA (wo
 
 For details about Rakuten MA, See https://github.com/rakuten-nlp/rakutenma
 
+See also http://qiita.com/yukinoi/items/925bc238185aa2fad8a7 (In Japanese)
+
 Contributions are welcome!
 
 
