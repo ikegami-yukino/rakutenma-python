@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 import re
 import json
 from .scw import SCW
@@ -154,7 +155,7 @@ class RakutenMA(object):
             if ctype is a string, simply adds it to arr,
             if ctype is an array, adds all the elements to arr (used for Chinese tokenization)
             """
-            if isinstance(ctype, str):
+            if hasattr(ctype, "split"):
                 arr.append(_f([label, ctype]))
             else:
                 arr += [_f([label, i]) for i in ctype]
@@ -616,7 +617,7 @@ class RakutenMA(object):
         """
 
         def token2str(token):
-            if isinstance(token, str):
+            if hasattr(token, "split"):
                 return token
             return token[0]
 

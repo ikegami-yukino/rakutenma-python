@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 from nose.tools import assert_equals, assert_true, assert_false, assert_raises
 from rakutenma import RakutenMA, Token, Trie, _BEOS_LABEL
 

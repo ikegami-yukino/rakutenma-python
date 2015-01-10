@@ -88,7 +88,8 @@ class TestTrie(object):
         Trie.insert(trie, ["a", "b"], 1)
         Trie.insert(trie, ["a", "c"], 2)
         actual = Trie.toString(trie)
-        assert_equals(set(actual.splitlines()), {"a b\t1", "a c\t2"})
+        desired = set(["a b\t1", "a c\t2"])
+        assert_equals(set(actual.splitlines()), desired)
 
     def test_each(self):
         trie1 = self.get_trie1()
