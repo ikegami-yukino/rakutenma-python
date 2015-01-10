@@ -108,9 +108,9 @@ Copyright
 =============
 
 Rakuten MA Python
-(c) 2015- Yukino Ikegami All Rights Reserved.
+(c) 2015- Yukino Ikegami. All Rights Reserved.
 
 Rakuten MA (original)
-(c) 2014 Rakuten NLP Project All Rights Reserved.
+(c) 2014 Rakuten NLP Project. All Rights Reserved.
 
 
