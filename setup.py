@@ -26,6 +26,8 @@ setup(
         'Natural Language :: Japanese',
         'Natural Language :: Chinese (Simplified)',
         'Natural Language :: Chinese (Traditional)',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Topic :: Text Processing :: Linguistic'
