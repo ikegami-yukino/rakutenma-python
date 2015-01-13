@@ -4,19 +4,19 @@
 class Trie:
 
     @staticmethod
-    def find(trie, key, depth=0):
+    def find(trie, key):
         """
         Args:
             <dict> trie
             <str> key
-            <int> depth
         Return:
             <float> value
         """
-        if depth == len(key):
-            return trie.get("v")
-        elif key[depth] in trie:
-            return Trie.find(trie[key[depth]], key, depth + 1)
+        for char in key:
+            if char not in trie:
+                return
+            trie = trie[char]
+        return trie.get("v")
 
     @staticmethod
     def find_partial(trie, key):
