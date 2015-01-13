@@ -558,9 +558,9 @@ class RakutenMA(object):
         if len(tokens1) != len(tokens2):
             return False
 
-        for i in range(len(tokens1)):
-            if (len(tokens1[i]) < 2 or len(tokens2[i]) < 2 or
-               tokens1[i][0] != tokens2[i][0] or tokens1[i][1] != tokens2[i][1]):
+        for (token1, token2) in zip(tokens1, tokens2):
+            if (len(token1) < 2 or len(token2) < 2 or
+               token1[0] != token2[0] or token1[1] != token2[1]):
                 return False
         return True
 
