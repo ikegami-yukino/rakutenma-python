@@ -34,10 +34,12 @@ FEATSET_ZH = (
     "c1", "c9", "c2", "c8", "c3", "c7"
 )
 
+# TDEF: transition default distribution
 TDEF = Trie.insert({}, [_DEF_LABEL, _DEF_LABEL], 1.)
 TDEF = Trie.insert(TDEF, [_BEOS_LABEL, _DEF_LABEL], 0.1)
 TDEF = Trie.insert(TDEF, [_DEF_LABEL, _BEOS_LABEL], 0.1)
 
+# EDEF: emission default distribution
 EDEF = Trie.insert({}, [_DEF_LABEL], 0.1)
 EDEF = Trie.insert(EDEF, [_BEOS_LABEL], 0.)
 
