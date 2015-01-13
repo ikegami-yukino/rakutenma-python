@@ -237,12 +237,11 @@ class RakutenMA(object):
         return csent
 
     @staticmethod
-    def calc_states0(cfeats, weights, e_def):
+    def calc_states0(cfeats, weights):
         """get state distribution based on emission features
         Args:
             <list> cfeat: set of feature values
             <dict> weights: feature weights (trie)
-            <dict> e_def: emission default distribution
         Return:
             <dict> states0
         """
@@ -250,7 +249,7 @@ class RakutenMA(object):
         states0 = {}
 
         for (i, cfeat) in enumerate(cfeats):
-            cemits = Trie.find_partial(weights, cfeat) or e_def
+            cemits = Trie.find_partial(weights, cfeat) or EDEF
             for k in cemits:
                 if i == 0:
                     # tag dictionary
@@ -272,7 +271,6 @@ class RakutenMA(object):
         Return:
             <list> csent
         """
-        e_def = EDEF.copy()
 
         weights = self.model.get("mu", {})
         trans = weights.get("t", TDEF.copy())
@@ -284,7 +282,7 @@ class RakutenMA(object):
         states0 = {}
 
         for char in csent[1:]:
-            states0 = self.calc_states0(char.f, weights, e_def)
+            states0 = self.calc_states0(char.f, weights)
             for (s0, states0_score) in states0.items():
                 max_score = -float("inf")
                 max_state = None

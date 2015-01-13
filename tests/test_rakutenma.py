@@ -237,17 +237,17 @@ class TestRakutenMA(object):
         csent = self.rma.tokens2csent([["foo", "N"], ["bar", "N"]], "SBIEO")
         csent = self.rma.add_efeats(csent)
 
-        assert_equals(self.rma.calc_states0(csent[1].f, WEIGHTS, {}),
+        assert_equals(self.rma.calc_states0(csent[1].f, WEIGHTS),
                       {"B-N": 2, "I-N": 1, "E-N": 1})
-        assert_equals(self.rma.calc_states0(csent[2].f, WEIGHTS, {}),
+        assert_equals(self.rma.calc_states0(csent[2].f, WEIGHTS),
                       {"B-N": 1, "I-N": 2, "E-N": 2})
-        assert_equals(self.rma.calc_states0(csent[3].f, WEIGHTS, {}),
+        assert_equals(self.rma.calc_states0(csent[3].f, WEIGHTS),
                       {"B-N": 1, "I-N": 2, "E-N": 2})
-        assert_equals(self.rma.calc_states0(csent[4].f, WEIGHTS, {}),
+        assert_equals(self.rma.calc_states0(csent[4].f, WEIGHTS),
                       {"B-N": 2, "I-N": 1, "E-N": 1})
-        assert_equals(self.rma.calc_states0(csent[5].f, WEIGHTS, {}),
+        assert_equals(self.rma.calc_states0(csent[5].f, WEIGHTS),
                       {"B-N": 1, "I-N": 2, "E-N": 1})
-        assert_equals(self.rma.calc_states0(csent[6].f, WEIGHTS, {}),
+        assert_equals(self.rma.calc_states0(csent[6].f, WEIGHTS),
                       {"B-N": 1, "I-N": 1, "E-N": 2})
 
     def test_decode(self):
