@@ -118,7 +118,7 @@ class RakutenMA(object):
         """
         num_feats = 0x01 << bits
 
-        def hash_func(x):
+        def hash_func(*x):
             _hash = self.string2hash("_".join(x))
             if _hash < 0:
                 return [str(_hash % (num_feats * -1) + num_feats - 1)]
@@ -150,7 +150,10 @@ class RakutenMA(object):
         _t = lambda i: csent[i] if csent_length > i >= 0 else Token()
 
         # feature hashing function
-        _f = self.hash_func if hasattr(self, "hash_func") else lambda x: x
+        if self.hash_func:
+            _f = self.hash_func
+        else:
+            _f = lambda *x: x[0] if isinstance(x[0], list) else list(x)
 
         def add_ctype_feats(arr, label, ctype):
             """a helper function to add all the feature values of ctype to arr
@@ -158,9 +161,9 @@ class RakutenMA(object):
             if ctype is an array, adds all the elements to arr (used for Chinese tokenization)
             """
             if hasattr(ctype, "split"):
-                arr.append(_f([label, ctype]))
+                arr.append(_f(label, ctype))
             else:
-                arr += [_f([label, i]) for i in ctype]
+                arr += [_f(label, i) for i in ctype]
 
         for (i, x) in enumerate(csent):
             csent[i].f = []
@@ -183,52 +186,53 @@ class RakutenMA(object):
                     add_ctype_feats(csent[i].f, feat, _t(i-3).t)
                 # character unigram
                 elif feat == "w0":
-                    csent[i].f.append(_f([feat, _t(i).c]))
+                    csent[i].f.append(_f(feat, _t(i).c))
                 elif feat == "w1":
-                    csent[i].f.append(_f([feat, _t(i+1).c]))
+                    csent[i].f.append(_f(feat, _t(i+1).c))
                 elif feat == "w9":
-                    csent[i].f.append(_f([feat, _t(i-1).c]))
+                    csent[i].f.append(_f(feat, _t(i-1).c))
                 elif feat == "w2":
-                    csent[i].f.append(_f([feat, _t(i+2).c]))
+                    csent[i].f.append(_f(feat, _t(i+2).c))
                 elif feat == "w8":
-                    csent[i].f.append(_f([feat, _t(i-2).c]))
+                    csent[i].f.append(_f(feat, _t(i-2).c))
                 elif feat == "w3":
-                    csent[i].f.append(_f([feat, _t(i+3).c]))
+                    csent[i].f.append(_f(feat, _t(i+3).c))
                 elif feat == "w7":
-                    csent[i].f.append(_f([feat, _t(i-3).c]))
+                    csent[i].f.append(_f(feat, _t(i-3).c))
                 # character bigram
                 elif feat == "b1":
-                    csent[i].f.append(_f([feat, _t(i).c, _t(i+1).c]))
+                    csent[i].f.append(_f(feat, _t(i).c, _t(i+1).c))
                 elif feat == "b9":
-                    csent[i].f.append(_f([feat, _t(i-1).c, _t(i).c]))
+                    csent[i].f.append(_f(feat, _t(i-1).c, _t(i).c))
                 elif feat == "b2":
-                    csent[i].f.append(_f([feat, _t(i+1).c, _t(i+2).c]))
+                    csent[i].f.append(_f(feat, _t(i+1).c, _t(i+2).c))
                 elif feat == "b8":
-                    csent[i].f.append(_f([feat, _t(i-2).c, _t(i-1).c]))
+                    csent[i].f.append(_f(feat, _t(i-2).c, _t(i-1).c))
                 elif feat == "b3":
-                    csent[i].f.append(_f([feat, _t(i+2).c, _t(i+3).c]))
+                    csent[i].f.append(_f(feat, _t(i+2).c, _t(i+3).c))
                 elif feat == "b7":
-                    csent[i].f.append(_f([feat, _t(i-3).c, _t(i-2).c]))
+                    csent[i].f.append(_f(feat, _t(i-3).c, _t(i-2).c))
                 # character type bigram
                 elif feat == "d1":
-                    csent[i].f.append(_f([feat, _t(i).t, _t(i+1).t]))
+                    csent[i].f.append(_f(feat, _t(i).t, _t(i+1).t))
                 elif feat == "d9":
-                    csent[i].f.append(_f([feat, _t(i-1).t, _t(i).t]))
+                    csent[i].f.append(_f(feat, _t(i-1).t, _t(i).t))
                 elif feat == "d2":
-                    csent[i].f.append(_f([feat, _t(i+1).t, _t(i+2).t]))
+                    csent[i].f.append(_f(feat, _t(i+1).t, _t(i+2).t))
                 elif feat == "d8":
-                    csent[i].f.append(_f([feat, _t(i-2).t, _t(i-1).t]))
+                    csent[i].f.append(_f(feat, _t(i-2).t, _t(i-1).t))
                 elif feat == "d3":
-                    csent[i].f.append(_f([feat, _t(i+2).t, _t(i+3).t]))
+                    csent[i].f.append(_f(feat, _t(i+2).t, _t(i+3).t))
                 elif feat == "d7":
-                    csent[i].f.append(_f([feat, _t(i-3).t, _t(i-2).t]))
+                    csent[i].f.append(_f(feat, _t(i-3).t, _t(i-2).t))
                 # character trigram
                 elif feat == "t0":
-                    csent[i].f.append(_f([feat, _t(i-1).c, _t(i).c, _t(i+1).c]))
+                    csent[i].f.append(_f(feat, _t(i-1).c, _t(i).c, _t(i+1).c))
                 elif feat == "t1":
-                    csent[i].f.append(_f([feat, _t(i).c, _t(i+1).c, _t(i+2).c]))
+                    csent[i].f.append(_f(feat, _t(i).c, _t(i+1).c, _t(i+2).c))
                 elif feat == "t9":
-                    csent[i].f.append(_f([feat, _t(i-2).c, _t(i-1).c, _t(i).c]))
+                    csent[i].f.append(_f(feat, _t(i-2).c, _t(i-1).c, _t(i).c))
+
                 else:
                     # if the feature template is a function,
                     # invoke it and add the returned value

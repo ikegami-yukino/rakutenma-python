@@ -115,6 +115,10 @@ class TestRakutenMA(object):
     def test_create_hash_func(self):
         rma = RakutenMA()
         hash_func = rma.create_hash_func(4)
+        assert_equals(hash_func("feat1", "foo"), ["5"])
+        assert_equals(hash_func("feat1", "bar"), ["2"])
+        assert_equals(hash_func("feat1", "baz"), ["10"])
+        assert_equals(hash_func("feat1", "qux"), ["3"])
 
     def test_str2csent(self):
         rma = RakutenMA()
