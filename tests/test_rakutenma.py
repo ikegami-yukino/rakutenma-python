@@ -58,6 +58,7 @@ class TestRakutenMA(object):
         assert_equals(res[2], 0.4)
 
         assert_raises(Exception, RakutenMA.eval_corpus, (["a"], []))
+        assert_raises(ValueError, RakutenMA.eval_corpus, ["a", "b"], ["a"])
 
     def test_tokenize_corpus(self):
         test_corpus = [[["abra", "pos1"], ["cadabra", "pos2"]]]
