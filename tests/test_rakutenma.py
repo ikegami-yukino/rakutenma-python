@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+import tempfile
+import json
+import os
 from nose.tools import assert_equals, assert_true, assert_false, assert_raises
 from rakutenma import RakutenMA, Token, Trie, _BEOS_LABEL
 
@@ -307,3 +310,14 @@ class TestRakutenMA(object):
         rma = RakutenMA()
         rma.set_tag_scheme("IOB2")
         assert_equals(rma.tag_scheme, "IOB2")
+
+    def test_save(self):
+        model = {"mu": {"feat1": 0.1}, "sigma": {"feat1": 0.2}}
+        rma = RakutenMA(model)
+        model_file = tempfile.mkstemp()[1]
+        try:
+            rma.save(model_file)
+            actual = json.load(open(model_file, 'r'))
+            assert_equals(actual, model)
+        finally:
+            os.remove(model_file)
