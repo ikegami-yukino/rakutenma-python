@@ -34,22 +34,17 @@ class Trie:
         return trie
 
     @staticmethod
-    def insert(trie, key, val, depth=0, key_length=0):
+    def insert(trie, key, val):
         """
         Args:
             <dict> trie
             <str> key
             <float> val
-            <int> depth
-            <int> length
         Return:
             <dict> trie
         """
-        if key_length == 0:
-            key_length = len(key)
-        if depth < key_length:
-            trie[key[depth]] = Trie.insert(trie.get(key[depth], {}), key, val,
-                                           depth + 1, key_length)
+        if key:
+            trie[key[0]] = Trie.insert(trie.get(key[0], {}), key[1:], val)
         else:
             trie["v"] = val
         return trie
