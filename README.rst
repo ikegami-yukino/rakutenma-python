@@ -28,7 +28,7 @@ Installation
 Example
 ===========
 
-::
+.. code:: python
 
  from rakutenma import RakutenMA
 
