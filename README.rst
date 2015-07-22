@@ -1,13 +1,7 @@
 Rakuten MA Python
 ===================
 
-.. image:: https://badge.fury.io/py/rakutenma.svg
-  :target: http://badge.fury.io/py/rakutenma
-.. image:: https://travis-ci.org/ikegami-yukino/rakutenma-python.svg?branch=master
-  :target: https://travis-ci.org/ikegami-yukino/rakutenma-python
-.. image:: https://coveralls.io/repos/ikegami-yukino/rakutenma-python/badge.png?branch=master
-  :target: https://coveralls.io/r/ikegami-yukino/rakutenma-python?branch=master
-
+|travis| |coveralls| |downloads| |version| |license|
 
 Rakuten MA Python (morphological analyzer) is a Python version of Rakuten MA (word segmentor + PoS Tagger) for Chinese and Japanese.
 
@@ -115,4 +109,21 @@ Rakuten MA Python
 Rakuten MA (original)
 (c) 2014 Rakuten NLP Project. All Rights Reserved.
 
+.. |travis| image:: https://travis-ci.org/ikegami-yukino/rakutenma-python.svg?branch=master
+    :target: https://travis-ci.org/ikegami-yukino/rakutenma-python
+    :alt: travis-ci.org
+.. |coveralls| image:: https://coveralls.io/repos/ikegami-yukino/rakutenma-python/badge.png
+    :target: https://coveralls.io/r/ikegami-yukino/rakutenma-python
+    :alt: coveralls.io
 
+.. |downloads| image:: https://img.shields.io/pypi/dm/rakutenma.svg
+    :target: http://pypi.python.org/pypi/rakutenma/
+    :alt: downloads
+
+.. |version| image:: https://img.shields.io/pypi/v/rakutenma.svg
+    :target: http://pypi.python.org/pypi/rakutenma/
+    :alt: latest version
+
+.. |license| image:: https://img.shields.io/pypi/l/rakutenma.svg
+    :target: http://pypi.python.org/pypi/rakutenma/
+    :alt: license
