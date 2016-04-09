@@ -1,7 +1,7 @@
 Rakuten MA Python
 ===================
 
-|travis| |coveralls| |downloads| |version| |license|
+|travis| |coveralls| |downloads| |pyversion| |version|  |landscape|  |license|
 
 Rakuten MA Python (morphological analyzer) is a Python version of Rakuten MA (word segmentor + PoS Tagger) for Chinese and Japanese.
 
@@ -45,7 +45,6 @@ Example
  print(rma.tokenize("彼は新しい仕事できっと成功するだろう。"))
 
  # Initialize a RakutenMA instance with a pre-trained model
- # "model_ja.json" is available at https://github.com/rakuten-nlp/rakutenma
  rma = RakutenMA(phi=1024, c=0.007812)  # Specify hyperparameter for SCW (for demonstration purpose)
  rma.load("model_ja.json")
 
@@ -116,6 +115,8 @@ Rakuten MA (original)
     :target: https://coveralls.io/r/ikegami-yukino/rakutenma-python
     :alt: coveralls.io
 
+.. |pyversion| image:: https://img.shields.io/pypi/pyversions/rakutenma.svg
+
 .. |downloads| image:: https://img.shields.io/pypi/dm/rakutenma.svg
     :target: http://pypi.python.org/pypi/rakutenma/
     :alt: downloads
@@ -123,6 +124,10 @@ Rakuten MA (original)
 .. |version| image:: https://img.shields.io/pypi/v/rakutenma.svg
     :target: http://pypi.python.org/pypi/rakutenma/
     :alt: latest version
+
+.. |landscape| image:: https://landscape.io/github/ikegami-yukino/rakutenma-python/master/landscape.svg?style=flat
+   :target: https://landscape.io/github/ikegami-yukino/rakutenma-python/master
+   :alt: Code Health
 
 .. |license| image:: https://img.shields.io/pypi/l/rakutenma.svg
     :target: http://pypi.python.org/pypi/rakutenma/

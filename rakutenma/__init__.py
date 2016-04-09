@@ -15,8 +15,8 @@ from .rakutenma import RakutenMA, Token
 from .scw import SCW
 from .trie import Trie
 
-VERSION = (0, 2)
-__version__ = "0.2"
+VERSION = (0, 2, 1)
+__version__ = "0.2.1"
 __all__ = ["RakutenMA", "Token", "SCW", "Trie", "_DEF_LABEL", "_BEOS_LABEL",
            "FEATSET_JA", "FEATSET_ZH"]
 
