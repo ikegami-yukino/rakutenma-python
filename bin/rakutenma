@@ -1,0 +1,37 @@
+#!/usr/bin/env python
+
+# -*- coding: utf-8 -*-
+from argparse import ArgumentParser
+import signal
+import sys
+from rakutenma import RakutenMA
+
+
+def signal_handler(signal, frame):
+    sys.exit(0)
+signal.signal(signal.SIGINT, signal_handler)
+
+PY3 = sys.version_info[0] == 3
+
+def main():
+    parser = ArgumentParser()
+    parser.add_argument("-e", "--enc", dest="enc", default="utf8", help="input encoding")
+    parser.add_argument("-m", "--model", dest="model", default="model_ja.json", help="path to model file")
+    parser.add_argument("-p", "--phi", dest="phi", default=1024)
+    parser.add_argument("-c", dest="c", default=0.007812)
+    args = parser.parse_args()
+
+    rma = RakutenMA(phi=args.phi, c=args.c)
+    rma.load(args.model)
+
+    while True:
+        try:
+            user_input = line = input() if PY3 else raw_input().decode(args.enc)
+            for (surface, pos) in rma.tokenize(user_input):
+                print('%s\t%s' % (surface, pos))
+        except EOFError:
+            break
+
+
+if __name__ == '__main__':
+    main()

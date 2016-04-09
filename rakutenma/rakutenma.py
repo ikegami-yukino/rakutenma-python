@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+import pkgutil
+import os
 import re
+import sys
 import json
 from .scw import SCW
 from .trie import Trie
@@ -42,6 +45,8 @@ TDEF = Trie.insert(TDEF, [_DEF_LABEL, _BEOS_LABEL], 0.1)
 # EDEF: emission default distribution
 EDEF = Trie.insert({}, [_DEF_LABEL], 0.1)
 EDEF = Trie.insert(EDEF, [_BEOS_LABEL], 0.)
+
+PY3 = sys.version_info[0] == 3
 
 
 class Token():
@@ -85,7 +90,14 @@ class RakutenMA(object):
         json.dump(self.model, open(filename, "w"))
 
     def load(self, filename):
-        self.set_model(json.load(open(filename, "r")))
+        if os.path.exists(filename):
+            self.set_model(json.load(open(filename, "r")))
+        elif filename == 'model_ja.json' or filename == 'model_ja.min.json':
+            model_data = pkgutil.get_data('rakutenma', os.path.join('model', filename))
+            if PY3:
+                self.set_model(json.loads(model_data.decode('utf8')))
+            else:
+                self.set_model(json.loads(model_data))
 
     @staticmethod
     def string2hash(_str):
@@ -314,7 +326,10 @@ class RakutenMA(object):
         # track the path and assign to csent[i].l
         final_path = statesp[_BEOS_LABEL].get("path", {})
         for (i, x) in enumerate(csent):
-            csent[i].l = final_path[i] or _DEF_LABEL
+            if len(final_path) > i:
+                csent[i].l = final_path[i] or _DEF_LABEL
+            else:
+                csent[i].l = _DEF_LABEL
         return csent
 
     @staticmethod

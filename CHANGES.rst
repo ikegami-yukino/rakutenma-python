@@ -1,7 +1,12 @@
 CHANGES
 =======
 
-0.2.1 (2016-04-09)
+0.3 (2016-04-10)
+-------------------------
+
+- Add CUI ($ rakutenma)
+
+0.2.2 (2016-04-09)
 -------------------------
 
 - Bundle model files (model_ja.json, model_ja_min.json)

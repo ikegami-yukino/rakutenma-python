@@ -35,5 +35,7 @@ setup(
         'Topic :: Text Processing :: Linguistic'
         ],
     long_description='%s\n\n%s' % (open('README.rst', encoding='utf8').read(),
-                                   open('CHANGES.rst', encoding='utf8').read())
+                                   open('CHANGES.rst', encoding='utf8').read()),
+    package_data={'rakutenma': ['model/*.json']},
+    scripts=['bin/rakutenma'],
 )
