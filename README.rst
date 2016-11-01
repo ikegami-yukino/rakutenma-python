@@ -1,7 +1,7 @@
 Rakuten MA Python
 ===================
 
-|travis| |coveralls| |downloads| |pyversion| |version|  |landscape|  |license|
+|travis| |coveralls| |pyversion| |version|  |landscape|  |license|
 
 Rakuten MA Python (morphological analyzer) is a Python version of Rakuten MA (word segmentor + PoS Tagger) for Chinese and Japanese.
 
@@ -116,10 +116,6 @@ Rakuten MA (original)
     :alt: coveralls.io
 
 .. |pyversion| image:: https://img.shields.io/pypi/pyversions/rakutenma.svg
-
-.. |downloads| image:: https://img.shields.io/pypi/dm/rakutenma.svg
-    :target: http://pypi.python.org/pypi/rakutenma/
-    :alt: downloads
 
 .. |version| image:: https://img.shields.io/pypi/v/rakutenma.svg
     :target: http://pypi.python.org/pypi/rakutenma/
