@@ -134,10 +134,7 @@ class RakutenMA(object):
             with open(filename, "w") as fd:
                 fd.write(json.dumps(self.model, double_precision))
         else:
-            original_float_repr = json.encoder.FLOAT_REPR
-            json.encoder.FLOAT_REPR = lambda o: format(o, double_precision)
             json.dump(self.model, open(filename, "w"))
-            json.encoder.FLOAT_REPR = original_float_repr
 
     def load(self, filename):
         if os.path.exists(filename):
