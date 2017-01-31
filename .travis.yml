@@ -4,6 +4,8 @@ python:
   - "2.7"
   - "3.3"
   - "3.4"
+  - "3.5"
+  - "3.6"
 install:
   - "python setup.py install"
   - "pip install coveralls"
@@ -11,9 +13,3 @@ script:
   - "nosetests --with-coverage --cover-package=rakutenma"
 after_success:
   - coveralls
-notifications:
-  email:
-    recipients:
-      - yukino0131@me.com
-    on_success: always
-    on_failure: always

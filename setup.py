@@ -16,7 +16,7 @@ setup(
     platforms=['POSIX', 'Windows', 'Unix', 'MacOS'],
     description='morphological analyzer (word segmentor + PoS Tagger) for Chinese and Japanese',
     author='Yukino Ikegami',
-    author_email='yukino0131@me.com',
+    author_email='yknikgm@gmail.com',
     url='https://github.com/ikegami-yukino/rakutenma-python',
     keywords=['morphological analyzer', 'word segmentor', 'PoS Tagger'],
     classifiers=[
@@ -32,6 +32,7 @@ setup(
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         'Topic :: Text Processing :: Linguistic'
         ],
     long_description='%s\n\n%s' % (open('README.rst', encoding='utf8').read(),

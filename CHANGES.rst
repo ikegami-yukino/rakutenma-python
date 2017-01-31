@@ -1,6 +1,13 @@
 CHANGES
 =======
 
+0.3.2 (2017-02-01)
+-------------------------
+
+- Use ujson when possible
+- Enable POS to MeCab style
+- Support Python 3.5 and 3.6
+
 0.3 (2016-04-10)
 -------------------------
 
