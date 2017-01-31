@@ -13,12 +13,55 @@ signal.signal(signal.SIGINT, signal_handler)
 
 PY3 = sys.version_info[0] == 3
 
+MECAB_MAP = {
+'A-c': '形容詞-一般',
+'A-dp': '形容詞-非自立可能',
+'C': '接続詞',
+'D': '代名詞',
+'E': '英単語',
+'F': '副詞',
+'I-c': '感動詞-一般',
+'J-c': '形状詞-一般',
+'J-tari': '形状詞-タリ',
+'J-xs': '形状詞-助動詞語幹',
+'M-aa': '補助記号-AA',
+'M-c': '補助記号-一般',
+'M-cp': '補助記号-括弧閉',
+'M-op': '補助記号-括弧開',
+'M-p': '補助記号-句点',
+'N-n': '名詞-名詞的',
+'N-nc': '名詞-普通名詞',
+'N-pn': '名詞-固有名詞',
+'N-xs': '名詞-助動詞語幹',
+'O': 'その他',
+'P': '接頭辞',
+'P-fj': '助詞-副助詞',
+'P-jj': '助詞-準体助詞',
+'P-k': '助詞-格助詞',
+'P-rj': '助詞-係助詞',
+'P-sj': '助詞-接続助詞',
+'Q-a': '接尾辞-形容詞的',
+'Q-j': '接尾辞-形状詞的',
+'Q-n': '接尾辞-名詞的',
+'Q-v': '接尾辞-動詞的',
+'R': '連体詞',
+'S-c': '記号-一般',
+'S-l': '記号-文字',
+'U': 'URL',
+'V-c': '動詞-一般',
+'V-dp': '動詞-非自立可能',
+'W': '空白',
+'X': '助動詞'}
+
+
 def main():
     parser = ArgumentParser()
     parser.add_argument("-e", "--enc", dest="enc", default="utf8", help="input encoding")
     parser.add_argument("-m", "--model", dest="model", default="model_ja.json", help="path to model file")
     parser.add_argument("-p", "--phi", dest="phi", default=1024)
     parser.add_argument("-c", dest="c", default=0.007812)
+    parser.add_argument("--mecab", default=False, action='store_true',
+                        help='MeCab style output')
     args = parser.parse_args()
 
     rma = RakutenMA(phi=args.phi, c=args.c)
@@ -26,8 +69,10 @@ def main():
 
     while True:
         try:
-            user_input = line = input() if PY3 else raw_input().decode(args.enc)
+            user_input = input() if PY3 else raw_input().decode(args.enc)
             for (surface, pos) in rma.tokenize(user_input):
+                if args.mecab:
+                    pos = MECAB_MAP[pos]
                 print('%s\t%s' % (surface, pos))
         except EOFError:
             break
