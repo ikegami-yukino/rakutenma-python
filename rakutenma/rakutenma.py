@@ -42,6 +42,45 @@ FEATSET_ZH = (
     "c1", "c9", "c2", "c8", "c3", "c7"
 )
 
+MECAB_MAP = {'形容詞-一般': 'A-c',
+'形容詞-非自立可能': 'A-dp',
+'接続詞': 'C',
+'代名詞': 'D',
+'英単語': 'E',
+'副詞': 'F',
+'感動詞-一般': 'I-c',
+'形状詞-一般': 'J-c',
+'形状詞-タリ': 'J-tari',
+'形状詞-助動詞語幹': 'J-xs',
+'補助記号-AA': 'M-aa',
+'補助記号-一般': 'M-c',
+'補助記号-括弧閉': 'M-cp',
+'補助記号-括弧開': 'M-op',
+'補助記号-句点': 'M-p',
+'名詞-名詞的': 'N-n',
+'名詞-普通名詞': 'N-nc',
+'名詞-固有名詞': 'N-pn',
+'名詞-助動詞語幹': 'N-xs',
+'その他': 'O',
+'接頭辞': 'P',
+'助詞-副助詞': 'P-fj',
+'助詞-準体助詞': 'P-jj',
+'助詞-格助詞': 'P-k',
+'助詞-係助詞': 'P-rj',
+'助詞-接続助詞': 'P-sj',
+'接尾辞-形容詞的': 'Q-a',
+'接尾辞-形状詞的': 'Q-j',
+'接尾辞-名詞的': 'Q-n',
+'接尾辞-動詞的': 'Q-v',
+'連体詞': 'R',
+'記号-一般': 'S-c',
+'記号-文字': 'S-l',
+'URL': 'U',
+'動詞-一般': 'V-c',
+'動詞-非自立可能': 'V-dp',
+'空白': 'W',
+'助動詞': 'X'}
+
 # TDEF: transition default distribution
 TDEF = Trie.insert({}, [_DEF_LABEL, _DEF_LABEL], 1.)
 TDEF = Trie.insert(TDEF, [_BEOS_LABEL, _DEF_LABEL], 0.1)
@@ -472,15 +511,21 @@ class RakutenMA(object):
                 feats.append(["t", csent.l, csents[i-1].l])
         return feats
 
-    def train_one(self, sent):
+    def train_one(self, sent, mecab=False):
         """train the current model based on a new (single) instance
         which is tsent (token-sentence)
         Args:
             <list> sent
+            <bool> mecab
         Return:
             <dict> res: result
         """
         res = {}
+
+        if mecab:
+            for i in range(len(sent)):
+                pos = MECAB_MAP[sent[i][1]]
+                sent[i] = [sent[i][0], pos]
 
         # get answer feats
         ans_csent = self.tokens2csent(sent, self.tag_scheme)
