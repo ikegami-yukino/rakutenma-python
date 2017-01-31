@@ -4,7 +4,12 @@ import pkgutil
 import os
 import re
 import sys
-import json
+try:
+    import ujson as json
+    use_ujson = True
+except:
+    import json
+    use_ujson = False
 from .scw import SCW
 from .trie import Trie
 
@@ -85,9 +90,16 @@ class RakutenMA(object):
     def set_tag_scheme(self, scheme):
         self.tag_scheme = scheme
 
-    def save(self, filename, float_repr=".6f"):
-        json.encoder.FLOAT_REPR = lambda o: format(o, float_repr)
-        json.dump(self.model, open(filename, "w"))
+    def save(self, filename, double_precision=".6f"):
+        if use_ujson:
+            with open(filename, "w") as fd:
+                fd.write(json.dumps(self.model, double_precision))
+        else:
+            original_float_repr = json.encoder.FLOAT_REPR
+            double_precision = ".%df" % double_precision
+            json.encoder.FLOAT_REPR = lambda o: format(o, double_precision)
+            json.dump(self.model, open(filename, "w"))
+            json.encoder.FLOAT_REPR = original_float_repr
 
     def load(self, filename):
         if os.path.exists(filename):
