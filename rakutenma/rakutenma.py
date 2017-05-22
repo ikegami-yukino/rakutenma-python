@@ -419,20 +419,20 @@ class RakutenMA(object):
                     tokens.append([cs.c, tail])
                     ctoken = None
         elif scheme == "IOB2":
-            for i in csent[1:-1]:  # Skip BOS and EOS
-                head = csent[i].l[0]
-                tail = csent[i].l[2:]
+            for cs in csent[1:-1]:  # Skip BOS and EOS
+                head = cs.l[0]
+                tail = cs.l[2:]
                 if head == "B":
                     if ctoken:
                         tokens.append(ctoken)
-                    ctoken = [csent[i].c, tail]
+                    ctoken = [cs.c, tail]
                 elif head == "I":
                     ctoken = ctoken or ["", tail]
-                    ctoken[0] += csent[i].c
+                    ctoken[0] += cs.c
                 else:
                     if ctoken:
                         tokens.append(ctoken)
-                    tokens.append([csent[i].c, tail])
+                    tokens.append([cs.c, tail])
                     ctoken = None
         else:
             raise ValueError("Invalid tag scheme!")
@@ -464,6 +464,9 @@ class RakutenMA(object):
         """
         csent = [Token(l=_BEOS_LABEL)]  # BOS
 
+        if not isinstance(tokens[0], list):
+            tokens = [tokens]
+
         if scheme == "SBIEO":
             for token in tokens:
                 length = len(token[0])
@@ -484,7 +487,7 @@ class RakutenMA(object):
             for token in tokens:
                 for j in range(len(token[0])):
                     tag = "B-" if j == 0 else "I-"
-                    csent.append(Token(c=token[0].substring(j, j+1),
+                    csent.append(Token(c=token[0][j:j+1],
                                        t=self.ctype_func(token[0][j]),
                                        l=tag + token[1]))
         else:
