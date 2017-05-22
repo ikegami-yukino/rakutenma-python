@@ -92,6 +92,7 @@ As initial setting, following values are set:
 
 - rma.featset = CTYPE_JA_PATTERNS  # RakutenMA.default_featset_ja
 - rma.hash_func = rma.create_hash_func(15)
+- rma.tag_scheme = "SBIEO"  # if using Chinese, set "IOB2"
 
 LICENSE
 =========
